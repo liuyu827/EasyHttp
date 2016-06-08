@@ -1,1 +1,1 @@
-include ':samples', ':EasyHttp'
+include ':samples', ':EasyHttp', ':EasyUI'

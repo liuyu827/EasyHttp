@@ -3,7 +3,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.0'
+        classpath 'com.android.tools.build:gradle:2.1.2'
     }
 }
 apply plugin: 'com.android.application'
@@ -39,5 +39,6 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:24.0.0-alpha2'
-    compile project(':EasyHttp')
+//    compile project(':EasyHttp')
+    compile 'com.lz.easyhttp:EasyHttp:0.0.1'
 }

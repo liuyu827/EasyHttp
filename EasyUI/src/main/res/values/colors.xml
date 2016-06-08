@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="library_transparent">#00000000</color>
+
+    <color name="pull_background">#F7F4F0</color>
+    <color name="pull_title_color">#333333</color>
+    <color name="pull_header_title_color">#ff000000</color>
+
+
+    <color name="refresh_color1">#ff0000</color>
+    <color name="refresh_color2">#ffff00</color>
+    <color name="refresh_color3">#ffffff</color>
+    <color name="refresh_color4">#0000ff</color>
+</resources>

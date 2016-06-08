@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="selected_view"/>
+    <item type="id" name="gridview"/>
+    <item type="id" name="webview"/>
+    <item type="id" name="scrollview"/>
+    <item type="id" name="viewpager"/>
+    <item type="id" name="pull_progress"/>
+    <item type="id" name="pull_text"/>
+    <item type="id" name="pull_image"/>
+
+    <item type="id" name="tabbar_frament"/>
+    <item type="id" name="tabbar_viewpager"/>
+    <item type="id" name="tabbar_tabwidget"/>
+
+
+    <item type="id" name="base_listview"/>
+    <item type="id" name="base_swipe_refresh_widget"/>
+    <item type="id" name="base_fgm_recyclerview"/>
+</resources>

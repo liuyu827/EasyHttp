@@ -97,7 +97,7 @@ public class EasyRequest {
                 getNetData(builder, easyLoadingListener);
             } catch (IOException e) {
                 if (easyLoadingListener != null) {
-                    easyLoadingListener.error(e, -2, "请求出现异常", null);
+                    easyLoadingListener.error(e, -2, "请求出现异常", null, null);
                 }
             }
         }
@@ -135,8 +135,8 @@ public class EasyRequest {
                             }
 
                             @Override
-                            public void error(Throwable e, int code, String result, Map<String, List<String>> headerMap) {
-                                easyLoadingListener.error(e, code, result, headerMap);
+                            public void error(Throwable e, int code, String error, String result, Map<String, List<String>> headerMap) {
+                                easyLoadingListener.error(e, code, error, result, headerMap);
                             }
                         });
                     } catch (Throwable e) {
@@ -201,7 +201,7 @@ public class EasyRequest {
                         maniHandler.post(new Runnable() {
                             @Override
                             public void run() {
-                                easyLoadingListener.error(e, -1, "请求失败", null);
+                                easyLoadingListener.error(e, -1, "请求失败", null, null);
                             }
                         });
                     }
@@ -216,7 +216,13 @@ public class EasyRequest {
                             maniHandler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    easyLoadingListener.error(null, response.code(), response.message(), null);
+                                    String result = null;
+                                    try {
+                                        result = response.body().string();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                    easyLoadingListener.error(null, response.code(), response.message(), result, null);
                                 }
                             });
                         }
@@ -231,7 +237,7 @@ public class EasyRequest {
                 requestCallBack(response.body().string(), false, response.headers().toMultimap(), false, easyLoadingListener);
             } else {
                 if (easyLoadingListener != null) {
-                    easyLoadingListener.error(null, response.code(), response.message(), null);
+                    easyLoadingListener.error(null, response.code(), response.message(), response.body().string(), null);
                 }
             }
         }
@@ -267,7 +273,7 @@ public class EasyRequest {
                 maniHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        easyLoadingListener.error(new RuntimeException("解析数据失败"), -3, body, multimap);
+                        easyLoadingListener.error(new RuntimeException("解析数据失败"), -3, "解析数据失败", body, multimap);
                     }
                 });
                 return;
