@@ -15,13 +15,13 @@ import com.lz.easyui.event.BaseEvent;
 import com.lz.easyui.util.RelayoutViewTool;
 import com.lz.easyui.util.SystemBarTintManager;
 import com.lz.easyui.widget.LibraryActionBar;
-import com.lz.easyui.widget.swipeback.SwipeBackLayout;
-import com.lz.easyui.widget.swipeback.app.SwipeBackActivity;
 
 import java.io.Serializable;
 
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
+import me.imid.swipebacklayout.lib.SwipeBackLayout;
+import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 
 /**
  *
@@ -83,7 +83,7 @@ public abstract class LibraryBaseActivity<ActionBar extends LibraryActionBar> ex
         int edge = getEdgeTrackingEnabled();
         setSwipeBackEnable(edge > -1);
         if (edge > -1) {
-            setEdgeTrackingEnabled(getEdgeTrackingEnabled());
+            getSwipeBackLayout().setEdgeTrackingEnabled(edge);
         }
 
         initHeader();
