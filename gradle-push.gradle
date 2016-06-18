@@ -18,8 +18,8 @@ install {
                 // Set your license
                 licenses {
                     license {
-                        name 'The Apache Software License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        name POM_LICENCE_NAME
+                        url POM_LICENCE_URL
                     }
                 }
                 developers {
@@ -67,7 +67,7 @@ bintray {
     configurations = ['archives']
     pkg {
         repo = "maven"
-        name = "easy"                                                 // #CONFIG# project name in jcenter
+        name = "easyhttp"                                                 // #CONFIG# project name in jcenter
         websiteUrl = POM_SCM_URL
         vcsUrl = POM_GIT_URL
         licenses = ["Apache-2.0"]
