@@ -196,36 +196,41 @@ public class EasyRequest {
                 @Override
                 public void onFailure(Call call, final IOException e) {
                     callMap.remove(call.request().url().toString());
-                    EasyProgressBar.getInstance().closeProgressBar();
-                    if (easyLoadingListener != null) {
-                        maniHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
+                    maniHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            EasyProgressBar.getInstance().closeProgressBar();
+                            if (easyLoadingListener != null) {
                                 easyLoadingListener.error(e, -1, "请求失败", null, null);
                             }
-                        });
-                    }
+                        }
+                    });
                 }
 
                 @Override
                 public void onResponse(Call call, final Response response) throws IOException {
                     callMap.remove(call.request().url().toString());
+                    maniHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            EasyProgressBar.getInstance().closeProgressBar();
+                        }
+                    });
                     if (!response.isSuccessful()) {
-                        EasyProgressBar.getInstance().closeProgressBar();
-                        if (easyLoadingListener != null) {
-                            maniHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    String result = null;
-                                    try {
-                                        result = response.body().string();
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
+                        maniHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                String result = null;
+                                try {
+                                    result = response.body().string();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                if (easyLoadingListener != null) {
                                     easyLoadingListener.error(null, response.code(), response.message(), result, null);
                                 }
-                            });
-                        }
+                            }
+                        });
                         return;
                     }
                     requestCallBack(response.body().string(), false, response.headers().toMultimap(), true, easyLoadingListener);
