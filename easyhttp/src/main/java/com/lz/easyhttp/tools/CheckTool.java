@@ -3,9 +3,6 @@ package com.lz.easyhttp.tools;
 import java.util.List;
 import java.util.Map;
 
-/**
- * 检查
- */
 public class CheckTool {
 
 

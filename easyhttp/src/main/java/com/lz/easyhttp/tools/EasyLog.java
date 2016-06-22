@@ -2,9 +2,6 @@ package com.lz.easyhttp.tools;
 
 import android.util.Log;
 
-/**
- * Log
- */
 public class EasyLog {
     private static boolean ISSHOW = false;
 

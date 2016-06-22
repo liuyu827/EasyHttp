@@ -7,9 +7,6 @@ import android.os.Build;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-/**
- *
- */
 public class ExecutorTool {
 
     private static final ExecutorService pool = Executors.newCachedThreadPool();

@@ -156,6 +156,7 @@ public class EasyRequest {
     private <T> void getNetData(final EasyBuilder builder, final EasyLoadingListener<T> easyLoadingListener) throws IOException {
         //判断网络是否正常
         if (!NetWorkTool.networkCanUse(builder.context.getApplicationContext())) {
+            EasyProgressBar.getInstance().closeProgressBar();
             easyLoadingListener.netError();
             return;
         }

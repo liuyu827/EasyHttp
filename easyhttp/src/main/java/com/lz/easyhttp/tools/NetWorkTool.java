@@ -11,13 +11,6 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
 
-/**
- * Created with IntelliJ IDEA.
- * User: junhai
- * Date: 13-1-18
- * Time: 下午12:03
- * To change this template use File | Settings | File Templates.
- */
 public class NetWorkTool {
 
     public static boolean networkCanUse(Context context) {
