@@ -2,7 +2,6 @@ package com.lz.easyhttp.request;
 
 import android.content.Context;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.lz.easyhttp.tools.MD5Tool;
 
@@ -22,8 +21,14 @@ public class EasyBuilder {
      */
     protected String requestUrl;
 
+    /**
+     * 请求类型
+     */
     protected String method;
 
+    /**
+     * 是否异步请求
+     */
     protected boolean async = true;
 
     /**
@@ -40,7 +45,6 @@ public class EasyBuilder {
      * JSON请求参数
      */
     protected JSONObject requestJSONObject;
-
 
     /**
      * 上传文件
@@ -82,6 +86,14 @@ public class EasyBuilder {
      */
     protected boolean localFirst = false;
 
+    /**
+     * 本地缓存时间
+     */
+    protected long cacheTime = -1;
+
+    /**
+     * 下载地址
+     */
     protected String downloadPath;
 
 
@@ -130,8 +142,26 @@ public class EasyBuilder {
         return this;
     }
 
-    public EasyBuilder localFirst() {
-        this.localFirst = true;
+    public EasyBuilder setCacheTime(long exceedTime) {
+        if (exceedTime > 0) {
+            localFirst = true;
+        }
+        this.cacheTime = exceedTime;
+        return this;
+    }
+
+    public EasyBuilder setParameters(Map<String, String> parameters) {
+        this.parameters = parameters;
+        return this;
+    }
+
+    public EasyBuilder setJson(JsonObject requestJsonObject) {
+        this.requestJsonObject = requestJsonObject;
+        return this;
+    }
+
+    public EasyBuilder setJSON(JSONObject requestJSONObject) {
+        this.requestJSONObject = requestJSONObject;
         return this;
     }
 

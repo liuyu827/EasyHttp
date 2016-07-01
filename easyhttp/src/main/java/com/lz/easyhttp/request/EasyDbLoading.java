@@ -12,7 +12,7 @@ import com.lz.easyhttp.tools.ExecutorTool;
 public class EasyDbLoading {
 
     protected interface LibraryDbCallBack {
-        public void dbCallBack(String data, boolean isToGetNet, boolean isHaveCache);
+        void dbCallBack(String data, boolean isToGetNet, boolean isHaveCache);
     }
 
     private static EasyDbLoading dbLoading;
@@ -35,14 +35,14 @@ public class EasyDbLoading {
                 @Override
                 protected String doInBackground(Void... params) {
                     //获取缓存数据
-//                String resultDb = EasyKvDb.read(dataKey);
-//                if (!CheckTool.isEmpty(resultDb)) {
-                    //如果有缓存数据，则获取上次缓存的时间
-//                    long lastDate = Long.parseLong(EasyKvDb.read(timeKey));
-                    //通过上次缓存的时间，判断当前是否需要请求网络，默认时间是 EXCEED_TIME
-//                    isToGetNet = isExceedForNowDateTime(lastDate, exceed_time);
-//                }
-                    return EasyKvDb.read(builder.toMd5() + "-data");
+                    String resultDb = EasyKvDb.read(builder.toMd5() + "-data");
+                    if (!CheckTool.isEmpty(resultDb)) {
+                        //如果有缓存数据，则获取上次缓存的时间
+                        long lastDate = Long.parseLong(EasyKvDb.read(builder.toMd5() + "-time"));
+                        //通过上次缓存的时间，判断当前是否需要请求网络，默认时间是 EXCEED_TIME
+                        isToGetNet = isExceedForNowDateTime(lastDate, builder.cacheTime);
+                    }
+                    return resultDb;
                 }
 
                 @Override
@@ -53,7 +53,14 @@ public class EasyDbLoading {
             ExecutorTool.executeTask(task);
         } else {
             String resultDb = EasyKvDb.read(builder.toMd5() + "-data");
-            libraryDbCallBack.dbCallBack(resultDb, true, !CheckTool.isEmpty(resultDb));
+            boolean isToGetNet = true;
+            if (!CheckTool.isEmpty(resultDb)) {
+                //如果有缓存数据，则获取上次缓存的时间
+                long lastDate = Long.parseLong(EasyKvDb.read(builder.toMd5() + "-time"));
+                //通过上次缓存的时间，判断当前是否需要请求网络，默认时间是 EXCEED_TIME
+                isToGetNet = isExceedForNowDateTime(lastDate, builder.cacheTime);
+            }
+            libraryDbCallBack.dbCallBack(resultDb, isToGetNet, !CheckTool.isEmpty(resultDb));
         }
     }
 
