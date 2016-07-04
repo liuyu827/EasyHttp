@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by liu_yu on 2014/4/16.
  * 请求回调方法
  */
 public abstract class EasyLoadingListener<T> {
@@ -29,11 +28,4 @@ public abstract class EasyLoadingListener<T> {
      * @param result
      */
     public abstract void error(Throwable e, int code, String error, String result, Map<String, List<String>> headerMap);
-
-    /**
-     * 请求返回header信息
-     */
-    public void onHeaders(Map<String, List<String>> headerMap) {
-
-    }
 }

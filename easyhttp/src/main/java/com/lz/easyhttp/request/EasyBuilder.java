@@ -8,6 +8,8 @@ import com.lz.easyhttp.tools.MD5Tool;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -49,7 +51,7 @@ public class EasyBuilder {
     /**
      * 上传文件
      */
-    protected File uploadFile;
+    protected List<File> uploadFiles;
 
     /**
      * header
@@ -67,7 +69,7 @@ public class EasyBuilder {
     protected String barMessage;
 
     /**
-     * 时候可以打点请求
+     * 点击返回是否可以打断请求
      */
     protected boolean canCancel = false;
 
@@ -216,11 +218,18 @@ public class EasyBuilder {
         return new EasyFuture(this);
     }
 
-
-    public EasyFuture asUploadFile(File file) {
+    public EasyUpload asUploadFile(File file) {
         this.method = "POST";
-        this.uploadFile = file;
-        return new EasyFuture(this);
+        List<File> files = new ArrayList<>();
+        files.add(file);
+        this.uploadFiles = files;
+        return new EasyUpload(this);
+    }
+
+    public EasyUpload asUploadFile(List<File> files) {
+        this.method = "POST";
+        this.uploadFiles = files;
+        return new EasyUpload(this);
     }
 
     public EasyDownLoadFuture asDownload(String path) {
@@ -234,13 +243,21 @@ public class EasyBuilder {
 
     @Override
     public String toString() {
-        return "\nurl: " + requestUrl +
-                "\nmethod: " + method +
-                (requestJsonObject != null ? "\njsonObject: " + requestJsonObject.toString() : "") +
-                (headerMap != null ? "\nheader: " + headerMap.toString() : "") +
-                (parameters != null ? "\nmap: " + parameters.toString() : "") +
-                "\ntimeOut: " + timeOut + "毫秒" +
-                "\nlocalFirst: " + localFirst +
-                "\n\n";
+        if ("GET".equals(method)){
+            return "\nurl: " + requestUrl +
+                    "\nmethod: " + method +
+                    (headerMap != null ? "\nheader: " + headerMap.toString() : "") +
+                    (parameters != null ? "\nmap: " + parameters.toString() : "") +
+                    "\ntimeOut: " + timeOut + "毫秒" +
+                    "\nlocalFirst: " + localFirst +
+                    "\n\n";
+        } else {
+            return "\nurl: " + requestUrl +
+                    "\nmethod: " + method +
+                    (jsonString() != null ? "\njsonObject: " + jsonString() : "") +
+                    (headerMap != null ? "\nheader: " + headerMap.toString() : "") +
+                    (parameters != null ? "\nmap: " + parameters.toString() : "") +
+                    "\n\n";
+        }
     }
 }

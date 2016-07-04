@@ -63,4 +63,12 @@
     </LinearLayout>
 
 
+    <Button
+        android:onClick="upload"
+        android:layout_marginTop="10dp"
+        android:text="上传文件"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+
 </LinearLayout>

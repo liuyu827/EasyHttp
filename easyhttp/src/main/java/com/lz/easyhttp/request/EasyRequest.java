@@ -50,9 +50,7 @@ public class EasyRequest {
     private OkHttpClient client;
 
 
-    public static final MediaType MEDIA_TYPE_MARKDOWN = MediaType.parse("text/x-markdown; charset=utf-8");
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-    private static final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
 
     private Handler maniHandler = new Handler(Looper.getMainLooper());
 
@@ -154,6 +152,7 @@ public class EasyRequest {
      * @param easyLoadingListener
      */
     private <T> void getNetData(final EasyBuilder builder, final EasyLoadingListener<T> easyLoadingListener) throws IOException {
+        EasyLog.i("Easy", "call: " + builder.toString());
         //判断网络是否正常
         if (!NetWorkTool.networkCanUse(builder.context.getApplicationContext())) {
             EasyProgressBar.getInstance().closeProgressBar();
@@ -173,9 +172,7 @@ public class EasyRequest {
         }
 
         RequestBody body = null;
-        if (builder.uploadFile != null) {
-            body = RequestBody.create(MEDIA_TYPE_MARKDOWN, builder.uploadFile);
-        } else if (!CheckTool.isEmpty(builder.jsonString())) {
+        if (!CheckTool.isEmpty(builder.jsonString())) {
             body = RequestBody.create(JSON, builder.jsonString());
         } else if (!CheckTool.isEmpty(builder.parameters)) {
             FormBody.Builder formBodyBuilder = new FormBody.Builder();
@@ -210,6 +207,8 @@ public class EasyRequest {
 
                 @Override
                 public void onResponse(Call call, final Response response) throws IOException {
+                    final String responseBody = response.body().string();
+                    EasyLog.i("Easy", "async onResponse: " + responseBody);
                     callMap.remove(call.request().url().toString());
                     maniHandler.post(new Runnable() {
                         @Override
@@ -221,29 +220,25 @@ public class EasyRequest {
                         maniHandler.post(new Runnable() {
                             @Override
                             public void run() {
-                                String result = null;
-                                try {
-                                    result = response.body().string();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
                                 if (easyLoadingListener != null) {
-                                    easyLoadingListener.error(null, response.code(), response.message(), result, null);
+                                    easyLoadingListener.error(null, response.code(), response.message(), responseBody, null);
                                 }
                             }
                         });
                         return;
                     }
-                    requestCallBack(response.body().string(), false, response.headers().toMultimap(), true, easyLoadingListener);
+                    requestCallBack(responseBody, false, response.headers().toMultimap(), true, easyLoadingListener);
                 }
             });
         } else {
             Response response = call.execute();
+            final String responseBody = response.body().string();
+            EasyLog.i("Easy", "sync onResponse: " + responseBody);
             if (response.isSuccessful()) {
-                requestCallBack(response.body().string(), false, response.headers().toMultimap(), false, easyLoadingListener);
+                requestCallBack(responseBody, false, response.headers().toMultimap(), false, easyLoadingListener);
             } else {
                 if (easyLoadingListener != null) {
-                    easyLoadingListener.error(null, response.code(), response.message(), response.body().string(), null);
+                    easyLoadingListener.error(null, response.code(), response.message(), responseBody, null);
                 }
             }
         }

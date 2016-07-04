@@ -10,9 +10,14 @@ import android.widget.ProgressBar;
 import com.liulishuo.filedownloader.BaseDownloadTask;
 import com.lz.easyhttp.request.Easy;
 import com.lz.easyhttp.request.EasyDownloadListener;
+import com.lz.easyhttp.request.EasyUploadListener;
 import com.lz.easyhttp.samples.model.HomeModel;
+import com.lz.easyhttp.samples.model.RequestModel;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends Activity {
 
@@ -47,10 +52,6 @@ public class MainActivity extends Activity {
 
 
     public void toStart(View view) {
-
-
-
-
         Easy.load(this, downloadUrl)
                 .asDownload(filePath + "/" + name)
                 .execute(new EasyDownloadListener() {
@@ -101,6 +102,48 @@ public class MainActivity extends Activity {
         new File(filePath + "/" + name).delete();
 
     }
+
+
+    public void upload(View view) {
+        List<File> files = new ArrayList<File>();
+        String name1 = "/storage/emulated/0/DCIM/Camera/IMG_20160704_112613.jpg";
+        String name2 = "/storage/emulated/0/DCIM/Camera/IMG_20160704_112611.jpg";
+        String name3 = "/storage/emulated/0/DCIM/Camera/IMG_20160704_112609.jpg";
+        String name4 = "/storage/emulated/0/DCIM/Camera/IMG_20160704_112608.jpg";
+        String name5 = "/storage/emulated/0/DCIM/Camera/IMG_20160704_112607.jpg";
+        files.add(new File(name1));
+        files.add(new File(name2));
+        files.add(new File(name3));
+        files.add(new File(name4));
+        files.add(new File(name5));
+
+        Easy.load(MainActivity.this, "http://1fd.mrocker.com/home/api/upload")
+                .barCanCancel()
+                .asUploadFile(files)
+                .executeAsync("bin", new EasyUploadListener<RequestModel<String>>() {
+                    @Override
+                    public void netError() {
+                        Log.d("======upload=====", "netError");
+                    }
+
+                    @Override
+                    public void success(File file, RequestModel<String> result, Map<String, List<String>> headerMap) {
+
+                        Log.d("======success======", "file: "+file.getPath()+" result: "+result.data);
+                    }
+
+                    @Override
+                    public void error(File file, Throwable e, int code, String error, String result, Map<String, List<String>> headerMap) {
+
+                        Log.d("======error======", "file: "+file.getPath()+" result: "+result);
+                    }
+                });
+
+
+
+    }
+
+
 
     /*new EasyDownloadListener() {
                     @Override

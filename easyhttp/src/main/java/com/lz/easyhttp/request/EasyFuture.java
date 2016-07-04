@@ -10,13 +10,13 @@ public class EasyFuture {
         this.builder = builder;
     }
 
-    public <T> void executeAsync(EasyLoadingListener<T> ionLoadingCallback){
+    public <T> void executeAsync(EasyLoadingListener<T> loadingListener){
         this.builder.async = true;
-        EasyRequest.getInstence().request(builder, ionLoadingCallback);
+        EasyRequest.getInstence().request(builder, loadingListener);
     }
 
-    public <T> void executeSync(EasyLoadingListener<T> ionLoadingCallback){
+    public <T> void executeSync(EasyLoadingListener<T> loadingListener){
         this.builder.async = false;
-        EasyRequest.getInstence().request(builder, ionLoadingCallback);
+        EasyRequest.getInstence().request(builder, loadingListener);
     }
 }

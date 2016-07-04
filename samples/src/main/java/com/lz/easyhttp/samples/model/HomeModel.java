@@ -30,7 +30,6 @@ public class HomeModel {
         }
 
         Easy.load(activity, "http://app.ohwit.com/i/app/home")
-                .localFirst()
                 .barCanCancel()
                 .barCanFinish()
                 .asGet(null)
@@ -48,9 +47,9 @@ public class HomeModel {
                     }
 
                     @Override
-                    public void error(Throwable e, int code, String result, Map<String, List<String>> headerMap) {
-
+                    public void error(Throwable e, int code, String error, String result, Map<String, List<String>> headerMap) {
                         Log.d("======error=", "code: " + code + " headerMap: " + headerMap);
+
                     }
                 });
     }
