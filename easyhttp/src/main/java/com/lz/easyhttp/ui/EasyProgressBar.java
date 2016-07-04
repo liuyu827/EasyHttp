@@ -12,6 +12,9 @@ import android.widget.TextView;
 import com.lz.easyhttp.R;
 import com.lz.easyhttp.tools.CheckTool;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import okhttp3.Call;
 
 /**
@@ -36,10 +39,15 @@ public class EasyProgressBar {
 
     private Dialog progressBarDialog;
 
-    private Call call;
+    private Set<Call> callSet = new HashSet<>();
 
     public synchronized void setCall(Call call) {
-        this.call = call;
+        this.callSet.clear();
+        this.callSet.add(call);
+    }
+
+    public synchronized void addCall(Call call) {
+        this.callSet.add(call);
     }
 
     /**
@@ -62,7 +70,7 @@ public class EasyProgressBar {
      * @param relayout  是否使用适配
      */
     public synchronized void startProgressBar(final Activity act, final String message, final boolean canCancel, final boolean canFinish, boolean relayout) {
-        call = null;
+        this.callSet.clear();
         if (progressBarDialog != null && progressBarDialog.isShowing())
             return;
 
@@ -83,8 +91,10 @@ public class EasyProgressBar {
                     @Override
                     public boolean onKey(DialogInterface dialogInterface, int i, KeyEvent keyEvent) {
                         if (i == KeyEvent.KEYCODE_BACK && (canCancel || canFinish)) {
-                            if (call != null) {
-                                call.cancel();
+                            if (CheckTool.isEmpty(callSet)) {
+                                for (Call call : callSet) {
+                                    call.cancel();
+                                }
                             }
                             if (canFinish) {
                                 act.finish();
@@ -102,6 +112,7 @@ public class EasyProgressBar {
 
     // 进度条 关
     public synchronized boolean closeProgressBar() {
+        this.callSet.clear();
         if (progressBarDialog != null && progressBarDialog.isShowing()) {
             maniHandler.post(new Runnable() {
                 @Override

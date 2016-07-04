@@ -143,7 +143,7 @@ public class EasyUpload {
 
         final Request request = requestBuilder.url(this.builder.requestUrl).method("POST", body).build();
         Call call = client.newCall(request);
-
+        EasyProgressBar.getInstance().addCall(call);
         if (this.builder.async) {
             call.enqueue(new Callback() {
                 @Override
@@ -164,8 +164,8 @@ public class EasyUpload {
                 public void onResponse(Call call, final Response response) throws IOException {
                     final String responseBody = response.body().string();
                     EasyLog.i("EasyUpload", "async upload success: " + responseBody);
-                    removeUpload(file);
                     if (!response.isSuccessful()) {
+                        removeUpload(file);
                         maniHandler.post(new Runnable() {
                             @Override
                             public void run() {
@@ -177,6 +177,7 @@ public class EasyUpload {
                         return;
                     }
                     requestCallBack(responseBody, file, response.headers().toMultimap(), true, uploadListener);
+                    removeUpload(file);
                 }
             });
         } else {

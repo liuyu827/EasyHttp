@@ -226,9 +226,26 @@ public class EasyBuilder {
         return new EasyUpload(this);
     }
 
+    public EasyUpload asUploadPath(String path) {
+        this.method = "POST";
+        List<File> files = new ArrayList<>();
+        files.add(new File(path));
+        this.uploadFiles = files;
+        return new EasyUpload(this);
+    }
+
     public EasyUpload asUploadFile(List<File> files) {
         this.method = "POST";
         this.uploadFiles = files;
+        return new EasyUpload(this);
+    }
+
+    public EasyUpload asUploadPath(List<String> paths) {
+        this.method = "POST";
+        this.uploadFiles = new ArrayList<>();
+        for (String fileStr : paths) {
+            this.uploadFiles.add(new File(fileStr));
+        }
         return new EasyUpload(this);
     }
 
@@ -243,7 +260,7 @@ public class EasyBuilder {
 
     @Override
     public String toString() {
-        if ("GET".equals(method)){
+        if ("GET".equals(method)) {
             return "\nurl: " + requestUrl +
                     "\nmethod: " + method +
                     (headerMap != null ? "\nheader: " + headerMap.toString() : "") +
