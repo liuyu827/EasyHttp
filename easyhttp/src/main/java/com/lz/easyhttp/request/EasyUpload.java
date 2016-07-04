@@ -149,13 +149,13 @@ public class EasyUpload {
                 @Override
                 public void onFailure(Call call, final IOException e) {
                     EasyLog.e("EasyUpload", "upload error", e);
-                    removeUpload(file);
                     maniHandler.post(new Runnable() {
                         @Override
                         public void run() {
                             if (uploadListener != null) {
                                 uploadListener.error(file, e, -1, "上传失败", null, null);
                             }
+                            removeUpload(file);
                         }
                     });
                 }
@@ -165,19 +165,18 @@ public class EasyUpload {
                     final String responseBody = response.body().string();
                     EasyLog.i("EasyUpload", "async upload success: " + responseBody);
                     if (!response.isSuccessful()) {
-                        removeUpload(file);
                         maniHandler.post(new Runnable() {
                             @Override
                             public void run() {
                                 if (uploadListener != null) {
                                     uploadListener.error(file, null, response.code(), response.message(), responseBody, response.headers().toMultimap());
                                 }
+                                removeUpload(file);
                             }
                         });
                         return;
                     }
                     requestCallBack(responseBody, file, response.headers().toMultimap(), true, uploadListener);
-                    removeUpload(file);
                 }
             });
         } else {
@@ -191,19 +190,20 @@ public class EasyUpload {
                     if (uploadListener != null) {
                         uploadListener.error(file, null, response.code(), response.message(), responseBody, null);
                     }
+                    removeUpload(file);
                 }
-                removeUpload(file);
             } catch (IOException e) {
-                removeUpload(file);
                 if (uploadListener != null) {
                     uploadListener.error(file, e, -1, "获取数据失败", null, null);
                 }
+                removeUpload(file);
             }
         }
     }
 
     private <T> void requestCallBack(final String body, final File file, final Map<String, List<String>> multimap, boolean async, final EasyUploadListener<T> uploadListener) {
         if (uploadListener == null) {
+            removeUpload(file);
             return;
         }
         T t = null;
@@ -233,6 +233,7 @@ public class EasyUpload {
                     @Override
                     public void run() {
                         uploadListener.error(file, new RuntimeException("解析数据失败"), -3, "解析数据失败", body, multimap);
+                        removeUpload(file);
                     }
                 });
                 return;
@@ -248,10 +249,12 @@ public class EasyUpload {
                 @Override
                 public void run() {
                     uploadListener.success(file, back, multimap);
+                    removeUpload(file);
                 }
             });
         } else {
             uploadListener.success(file, back, multimap);
+            removeUpload(file);
         }
     }
 
