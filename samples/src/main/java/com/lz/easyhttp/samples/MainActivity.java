@@ -13,6 +13,7 @@ import com.lz.easyhttp.request.EasyDownloadListener;
 import com.lz.easyhttp.request.EasyUploadListener;
 import com.lz.easyhttp.samples.model.HomeModel;
 import com.lz.easyhttp.samples.model.RequestModel;
+import com.lz.easyhttp.tools.EasyLog;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -133,9 +134,13 @@ public class MainActivity extends Activity {
                     }
 
                     @Override
-                    public void error(File file, Throwable e, int code, String error, String result, Map<String, List<String>> headerMap) {
+                    public void cancel(File file) {
+                        EasyLog.d("======cancel======", "file: "+file.getPath());
+                    }
 
-                        Log.d("======error======", "file: "+file.getPath()+" result: "+result);
+                    @Override
+                    public void error(File file, Throwable e, int code, String error, String result) {
+                        EasyLog.d("======error======", "file: "+file.getPath() + " error: "+error);
                     }
                 });
 

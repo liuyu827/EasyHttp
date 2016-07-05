@@ -81,7 +81,7 @@ public class EasyBuilder {
     /**
      * 超时时间 毫秒
      */
-    protected int timeOut = 10000;
+    protected int timeOut = Integer.MAX_VALUE;
 
     /**
      * 是否先获取本地数据
@@ -266,15 +266,13 @@ public class EasyBuilder {
                     (headerMap != null ? "\nheader: " + headerMap.toString() : "") +
                     (parameters != null ? "\nmap: " + parameters.toString() : "") +
                     "\ntimeOut: " + timeOut + "毫秒" +
-                    "\nlocalFirst: " + localFirst +
-                    "\n\n";
+                    "\nlocalFirst: " + localFirst;
         } else {
             return "\nurl: " + requestUrl +
                     "\nmethod: " + method +
                     (jsonString() != null ? "\njsonObject: " + jsonString() : "") +
                     (headerMap != null ? "\nheader: " + headerMap.toString() : "") +
-                    (parameters != null ? "\nmap: " + parameters.toString() : "") +
-                    "\n\n";
+                    (parameters != null ? "\nmap: " + parameters.toString() : "");
         }
     }
 }

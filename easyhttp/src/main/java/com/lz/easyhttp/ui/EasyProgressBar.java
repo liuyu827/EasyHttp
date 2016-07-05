@@ -58,18 +58,18 @@ public class EasyProgressBar {
      * @param canFinish 是否可关闭当前Activity
      */
     public synchronized void startProgressBar(final Activity act, String message, final boolean canCancel, final boolean canFinish) {
-        startProgressBar(act, message, canCancel, canFinish, true);
+        startProgressBar(act, message, canCancel, canFinish, null);
     }
 
     /**
      * 启动加载进度条
      *
-     * @param message   提示文字int 不接收String
-     * @param canCancel 是否可关闭进度条状态
-     * @param canFinish 是否可关闭当前Activity
-     * @param relayout  是否使用适配
+     * @param message          提示文字int 不接收String
+     * @param canCancel        是否可关闭进度条状态
+     * @param canFinish        是否可关闭当前Activity
+     * @param progressListener 关闭转轮监听
      */
-    public synchronized void startProgressBar(final Activity act, final String message, final boolean canCancel, final boolean canFinish, boolean relayout) {
+    public synchronized void startProgressBar(final Activity act, final String message, final boolean canCancel, final boolean canFinish, final EasyProgressListener progressListener) {
         this.callSet.clear();
         if (progressBarDialog != null && progressBarDialog.isShowing())
             return;
@@ -91,11 +91,13 @@ public class EasyProgressBar {
                     @Override
                     public boolean onKey(DialogInterface dialogInterface, int i, KeyEvent keyEvent) {
                         if (i == KeyEvent.KEYCODE_BACK && (canCancel || canFinish)) {
-                            if (CheckTool.isEmpty(callSet)) {
+                            if (!CheckTool.isEmpty(callSet)) {
                                 for (Call call : callSet) {
                                     call.cancel();
                                 }
                             }
+                            progressListener.cancel();
+
                             if (canFinish) {
                                 act.finish();
                             }
@@ -123,5 +125,9 @@ public class EasyProgressBar {
             return true;
         }
         return false;
+    }
+
+    public interface EasyProgressListener {
+        void cancel();
     }
 }
